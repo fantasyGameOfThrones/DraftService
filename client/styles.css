@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+#characters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 200px;
+
+}
+#characters > div {
+  cursor: pointer;
+  padding: 0 3px 0 3px;
+}
+
+#characters > div:hover {
+  background: lightgrey;
+}
+
+.selected {
+  background: lightgrey;
+}

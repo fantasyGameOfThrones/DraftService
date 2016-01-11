@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" type="text/css" href='./styles.css'/>
+</head>
+<body>
+  <h3>Draft!   1534   3047   1375   8385</h3>
+  <script src='./socket.io.js'></script>
+  <div class='container' style=''>
+    <div class="left">
+      <input type="button" value="start" onClick="startDraft()"></script>
+      <input type="button" value="timer" onClick="startTimer()"></script>
+      <form>
+        <input type="text" id="id_num" placeholder="id number"/>
+        <input type="button" onClick="init()" value="init"/>
+      </form>
+      <div id="timer"></div>
+      <div id="teams"></div>
+    </div>
+    <div id="characters"></div>
+  </div>
+  <script>
+    // var socket = io.connect('http://localhost:8080');
+    var timer = document.getElementById('timer');
+    var socket = io();
+    var startDraft = function(){
+      socket.emit('startDraft');
+    }
+    var startTimer = function(){
+      socket.emit('startTimer');
+    }
+    var init = function() {
+      var id = document.getElementById('id_num').value
+      socket.emit('init', id);
+    }
+    var draftCharacter = function() {
+      console.log('here');
+      socket.emit('draftCharacter', {team_id : document.getElementById('id_num').value, char_id:+this});
+    };
+    socket.on('timeUpdate', function(timeObj) {
+      timer.innerHTML = timeObj.time;
+    });
+    socket.on('joined', function(player) {
+      document.getElementById('teams').appendChild('<div>'+player+'</div>');
+    })
+    socket.on('updateStore', function(state) {
+      var str = ''
+      state.teams.forEach(function(team){
+        var divString = team.id === state.currentTeamId ? '<div class="selected">' : '<div>';
+        if(team.loggedOn){
+          str += divString + team.name+' | '+team.characters+'</div>'
+        }
+      });
+      document.getElementById('teams').innerHTML = str;
+      
+
+      if(state.draftStatus ==='MID_DRAFT'){
+        var str = ''
+        console.log(state);
+        state.characterIds.forEach(function(id) {
+          str += '<div onclick="draftCharacter.call('+ id +')">' + id + '</div>';
+        });
+        document.getElementById('characters').innerHTML = str;
+      }
+    });
+
+  </script>
+</body>
+</html>
