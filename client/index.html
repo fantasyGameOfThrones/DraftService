@@ -23,7 +23,7 @@
   </div>
   <script>
     // var socket = io.connect('http://localhost:8080');
-    var timer = document.getElementById('timer');
+    
     var socket = io();
     var startDraft = function(){
       socket.emit('startDraft');
@@ -42,13 +42,29 @@
       console.log('here');
       socket.emit('draftCharacter', {team_id : document.getElementById('id_num').value, char_id:+this});
     };
-    socket.on('timeUpdate', function(timeObj) {
-      timer.innerHTML = timeObj.time;
-    });
+    var getTime = function(seconds) {
+      var timeString = '';
+      if(!seconds){
+        timeString = '0:00';
+      }else{
+        timeString = (seconds / 60 | 0).toString();
+        timeString += ':';
+        timeString += seconds % 60 < 10 ? '0' : '';
+        timeString += (seconds % 60).toString();
+
+      }
+      return timeString;
+    }
+    var timer = document.getElementById('timer');
     socket.on('joined', function(player) {
       document.getElementById('teams').appendChild('<div>'+player+'</div>');
-    })
+    });
     socket.on('updateStore', function(state) {
+      console.log(state);
+
+      if(state && state.timer && state.timer.seconds) {
+        timer.innerHTML = getTime(state.timer.seconds);
+      }
       var str = ''
       state.teams.forEach(function(team){
         var divString = team.id === state.currentTeamId ? '<div class="selected">' : '<div>';
@@ -61,7 +77,6 @@
 
       if(state.draftStatus ==='MID_DRAFT'){
         var str = ''
-        console.log(state);
         state.characterIds.forEach(function(id) {
           str += '<div onclick="draftCharacter.call('+ id +')">' + id + '</div>';
         });

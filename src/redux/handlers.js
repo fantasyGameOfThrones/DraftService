@@ -16,10 +16,6 @@ export const nextTeam = (state) => {
   }
 };
 
-export const endDraft = (state) => {
-  return state
-    .set('draftStatus', 'POST_DRAFT');
-};
 
 export const startDraft = (state) => {
   let order = state.get('teams')
@@ -30,12 +26,21 @@ export const startDraft = (state) => {
   let order3 = order2.concat(order2.concat(order2));
   return state
     .merge(fromJS({
-      order: order,
+      order: order3,
       draftStatus: 'MID_DRAFT',
       currentTeamIndex: 0,
-      currentTeamId: order.get(0)
+      currentTeamId: order3.get(0)
     }));
 };
+
+
+export const endDraft = (state) => {
+  return state
+    .set('draftStatus', 'POST_DRAFT')
+    .delete('currentTeamId')
+    .delete('currentTeamIndex')
+};
+
 
 //combine these two into one
 export const teamLogOn = (state, id) => {
@@ -59,47 +64,63 @@ export const teamLogOff = (state, id) => {
 };
 
 export const draftCharacter = (state, pick) => {
-  let team_index = state.get('teams')
-    .map((team) => team.get('id').toString())
-    .indexOf(pick.team_id.toString());
-
-  let char_index = state.get('characterIds')
-    .indexOf(pick.char_id);
   
+  if(state.get('draftStatus') === 'MID_DRAFT') {
+
+    let team_index = state.get('teams')
+      .map((team) => team.get('id').toString())
+      .indexOf(pick.team_id.toString());
+
+    let char_index = state.get('characterIds')
+      .indexOf(pick.char_id);
+
+    return state
+      .updateIn(
+        ['teams',team_index,'characters'],
+        (characters) => characters.push(pick.char_id)
+      )
+      .updateIn (
+        ['characterIds'],
+        (ids) => ids.splice(char_index, 1)
+      );
+    } else {
+      return state;
+    }
+};
+
+export const initTimer = (state, payload) => {
   return state
-    .updateIn(
-      ['teams',team_index,'characters'],
-      (characters) => characters.push(pick.char_id)
-    )
-    .updateIn(
-      ['characterIds'],
-      (ids) => ids.splice(char_index, 1)
-    );
+    .updateIn(['timer','seconds'], () => payload ? payload.initSeconds : 120)
 };
-
-export const draftRandom = (state) => {
-  let char_index = Math.random() * state.get('characterIds').size | 0;
-
-  let pick = {
-    team_id: state.get('currentTeamId'),
-    char_id: state.getIn(['characterIds', char_index])
-  };
-
-  return draftCharacter(state, pick);
-};
-
-let timer;
 
 export const startTimer = (state, payload) => {
-  if(!state.timerIsRunning) {
-    timer = new Timer(2);
-    timer.start(payload.viewUpdate, payload.alarm);
+  return state
+    .updateIn(['timer','timerIsRunning'], () => true )
+};
+
+export const decrementTimer = (state, payload)=>{
+  let autoDraft = false;
+  let newState = state
+    .updateIn(['timer','seconds'],
+      (seconds) => {
+        seconds = seconds - 1;
+        if(seconds === 0) {
+          autoDraft = true;
+        }
+        return seconds;
+      });
+  if(autoDraft) {
+    return newState.set('autoDraft', true);
   }
-  return state;
+  return newState;
+};
+
+export const resetAutoDraft = (state) => {
+  return state.set('autoDraft', false);
 };
 
 export const stopTimer = (state) => {
-  // console.log('timer', timer);
-  timer.stop();
-  return state;
+  return state
+    .updateIn(['timer','timerIsRunning'], () => false)
+    .updateIn(['timer','seconds'], () => null)
 };

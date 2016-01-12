@@ -9,7 +9,9 @@ export const startDraft = () => {
 };
 
 export const endDraft = () => {
-
+  store.dispatch({
+    type: 'END_DRAFT'
+  })
 };
 
 export const nextTeam = () => {
@@ -45,10 +47,27 @@ export const teamLogOff = (id) => {
   });
 };
 
-export const startTimer = (viewUpdate, alarm) => {
+export const initTimer = () => {
   store.dispatch({
-    type: 'START_TIMER',
-    payload: {viewUpdate,alarm}
+    type: 'INIT_TIMER'
+  });
+};
+
+export const resetAutoDraft = () => {
+  store.dispatch({
+    type: 'RESET_AUTO_DRAFT'
+  });
+};
+
+export const startTimer = () => {
+  store.dispatch({
+    type: 'START_TIMER'
+  });
+};
+
+export const decrementTimer = () => {
+  store.dispatch({
+    type: 'DECREMENT_TIMER'
   });
 };
 

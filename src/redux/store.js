@@ -4,7 +4,11 @@ import reducer from './reducer';
 const store = createStore(reducer);
 
 store.subscribe(() => {
-  console.log(store.getState().get('draftStatus'),store.getState().get('teams'));
+  let state = store.getState();
+  console.log(state.get('teams'));
+  // console.log(state.get('currentTeamIndex'));
+  // console.log(state.get('currentTeamId'));
+  // console.log(state.get('draftStatus'));
 });
 
 export default store;
