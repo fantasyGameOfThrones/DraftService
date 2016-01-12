@@ -5,5 +5,3 @@ import store from './redux/store';
 import reducer from './redux/reducer';
 import * as handlers from './redux/handlers';
 import logic from './server/logic';
-
-
