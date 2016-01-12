@@ -6,11 +6,19 @@ import {List, fromJS} from 'immutable';
 export const nextTeam = (state) => {
   let index = state.get('currentTeamIndex');
 
-  index = index === state.get('order').size-1 ? 0 : index + 1;
+  if(index === state.get('order').size - 1) {
+    return endDraft(state);
+  }else{
+    index = index + 1;
+    return state
+      .set('currentTeamIndex', index)
+      .set('currentTeamId', state.getIn(['order', index]));
+  }
+};
 
+export const endDraft = (state) => {
   return state
-    .set('currentTeamIndex', index)
-    .set('currentTeamId', state.getIn(['order', index]));
+    .set('draftStatus', 'POST_DRAFT');
 };
 
 export const startDraft = (state) => {
@@ -18,7 +26,8 @@ export const startDraft = (state) => {
     .filter((team) => team.get('loggedOn'))
     .map((team) => team.get('id'))
     .sort((a,b) => Math.random() > .5);
-
+  let order2 = order.concat(order.reverse());
+  let order3 = order2.concat(order2.concat(order2));
   return state
     .merge(fromJS({
       order: order,
@@ -83,17 +92,14 @@ let timer;
 
 export const startTimer = (state, payload) => {
   if(!state.timerIsRunning) {
-    timer = new Timer(120);
+    timer = new Timer(2);
     timer.start(payload.viewUpdate, payload.alarm);
   }
-
   return state;
 };
 
 export const stopTimer = (state) => {
-  timer.stop((timeObj) => {
-    io.emit('timeUpdate', timeObj);
-  });
-
+  // console.log('timer', timer);
+  timer.stop();
   return state;
 };

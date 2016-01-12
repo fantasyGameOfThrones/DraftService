@@ -18,13 +18,10 @@ export class Timer {
   }
 
   stop(viewUpdate) {
-    console.log('stop function called');
-    viewUpdate = viewUpdate || function(){};
-    this.seconds = 0;
     clearInterval(this.counter);
-    viewUpdate(this.makeTimeObject());
-    return 0;
+    return this.seconds = 0;
   }
+
   countEnd(alarm){
     clearInterval(this.counter);
     alarm();

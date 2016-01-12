@@ -10,23 +10,32 @@ io.on('connection', (socket) => {
   };
 
   const alarm = (timeObj) => {
-    actions.draftRandom()
-    actions.nextTeam()
-    actions.startTimer(updateView,alarm)
+    if(store.getState().get('draftStatus') === 'MID_DRAFT'){
+      actions.draftRandom()
+      actions.nextTeam()
+      actions.startTimer(updateView, alarm)
+    }
   };
 
   store.subscribe(() => {
-    socket.emit('updateStore', store.getState());
+    let state = store.getState()
+    socket.emit('updateStore', state);
+    if(state.get('draftStatus' === 'POST_DRAFT')) {
+      console.log('DATA TO SEND', {league_id:state.get('league_id'),teams: state.get('teams')});
+    }
   });
 
   socket.on('startDraft', () => {
-    console.log('draft starting');
     actions.startDraft();
     actions.startTimer(updateView, alarm);
   });
 
   socket.on('startTimer', () => {
-    actions.startTimer();
+    actions.startTimer(updateView, alarm);
+  });
+
+  socket.on('stopTimer', () => {
+    actions.stopTimer();
   });
 
   socket.on('init', (data) => {

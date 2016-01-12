@@ -11,6 +11,7 @@
     <div class="left">
       <input type="button" value="start" onClick="startDraft()"></script>
       <input type="button" value="timer" onClick="startTimer()"></script>
+      <input type="button" value="timer" onClick="stopTimer()"></script>
       <form>
         <input type="text" id="id_num" placeholder="id number"/>
         <input type="button" onClick="init()" value="init"/>
@@ -29,6 +30,9 @@
     }
     var startTimer = function(){
       socket.emit('startTimer');
+    }
+    var stopTimer = function(){
+      socket.emit('stopTimer');
     }
     var init = function() {
       var id = document.getElementById('id_num').value
