@@ -1,7 +1,9 @@
 import * as actions from './../redux/actions';
 import {io} from './../services/socket';
 import store from './../redux/store';
+import http from 'http';
 
+store.dispatch(actions.getInitialData());
 
 let timerInterval = null;
 
@@ -11,9 +13,11 @@ io.on('connection', (socket) => {
     io.emit('timeUpdate', timeObj);
   };
 
+  // refactor draftCharacter function, pull out socket listeners
+  // perhaps put store.subscribe elsewhere too. 
+
   const draftCharacter = (pick) => { 
     if(pick.team_id === store.getState().get('currentTeamId').toString()) {
-      console.log('draftChar func ', pick);
       stopTimer();
       actions.draftCharacter(pick);
       actions.nextTeam();
@@ -40,7 +44,12 @@ io.on('connection', (socket) => {
     }
     if(state.get('draftStatus') === 'POST_DRAFT' && state.getIn(['timer','timerIsRunning'])) {
       stopTimer();
-      console.log('DATA TO SEND', {league_id:state.get('league_id'),teams: state.get('teams')});
+      let options = {
+        host: 'http://localhost:3000/results',
+        method: 'POST',
+        data: {league_id:state.get('league_id'),teams: state.get('teams')}
+      };
+      console.log('DATA TO SEND', options);
     }
   });
 
@@ -74,11 +83,13 @@ io.on('connection', (socket) => {
     actions.teamLogOn(data);
   });
 
-
-
-
   socket.on('draftCharacter', (pick) => {
     draftCharacter(pick);
-  })
+  });
+
+  socket.on('moose', ()=>{
+    console.log('moose');
+    socket.emit('lemur');
+  });
 
 });

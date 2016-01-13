@@ -1,6 +1,52 @@
-import Timer from './../services/Timer.js';
 import store from './store.js';
+import fetch from 'isomorphic-fetch';
+import {fromJS, List} from 'immutable';
 
+export const getInitialData = () => {
+  return (dispatch) => {
+    return fetch('http://localhost:3000/draft')
+      .then((response)=>response.json())
+      .then((data) => {
+        return fromJS(data)
+          .updateIn(
+            ['characters'],
+            (characters) => characters.map((char)=>char.get('char_id'))
+          )
+          .updateIn(
+            ['order'],
+            () => new List()
+          )
+          .updateIn(
+            ['draftStatus'],
+            () => 'PRE_DRAFT'
+          )
+          .updateIn(
+            ['league','teams'],
+            (teams) => teams.map((team) => {
+              return team
+                .set('loggedOn',false)
+                .set('characters', new List())
+            })
+          )
+      })
+      .then((data) => {
+        return data
+          .set('teams', data.getIn(['league','teams']))
+          .deleteIn(['league','teams'])
+          .set('characterIds', data.get('characters'))
+          .delete('characters')
+      })
+      .then((data) => {
+        dispatch({
+          type: 'RECEIVE_INITAL_DATA',
+          payload: data
+        });
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+  }
+};
 
 export const startDraft = () => {
   store.dispatch({

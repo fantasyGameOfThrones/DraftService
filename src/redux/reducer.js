@@ -1,22 +1,16 @@
 import {List, Map, fromJS} from 'immutable';
 import * as handlers from './handlers';
-import teams from './../../teams.json';
-import characters from './../../characters.json';
+import fetch from 'isomorphic-fetch'
 
 
-const DEFAULT_STATE =
-  Map({
-    draftStatus: 'PRE_DRAFT',
-    order: new List(),
-    teams : fromJS(teams),
-    characterIds : fromJS(characters).map((char) => {
-      return char.get('char_id');
-    })
-  });
+let DEFAULT_STATE = null;
 
+// todo: pull out timer into own reducer
 export default (state = DEFAULT_STATE, action) => {
 
   switch(action.type) {
+    case "RECEIVE_INITAL_DATA":
+      return handlers.receiveInitialData(state, action.payload);
     case "TEAM_LOG_ON":
       return handlers.teamLogOn(state, action.payload);
     case "TEAM_LOG_OFF":

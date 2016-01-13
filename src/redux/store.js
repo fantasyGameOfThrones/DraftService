@@ -1,14 +1,12 @@
-import {createStore} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import reducer from './reducer';
+import thunk from 'redux-thunk';
 
-const store = createStore(reducer);
+const store = applyMiddleware(thunk)(createStore)(reducer);
 
 store.subscribe(() => {
   let state = store.getState();
-  console.log(state.get('teams'));
-  // console.log(state.get('currentTeamIndex'));
-  // console.log(state.get('currentTeamId'));
-  // console.log(state.get('draftStatus'));
+  console.log('store says: ', state);
 });
 
 export default store;
