@@ -1,14 +1,17 @@
-import {Timer} from './../services/timer.js';
+
 import {io} from './../services/socket.js';
 import {List, fromJS} from 'immutable';
 
+export const receiveInitialData = (state, payload) => {
+  return payload;
+};
 
 export const nextTeam = (state) => {
   let index = state.get('currentTeamIndex');
 
   if(index === state.get('order').size - 1) {
     return endDraft(state);
-  }else{
+  } else {
     index = index + 1;
     return state
       .set('currentTeamIndex', index)
@@ -41,14 +44,13 @@ export const endDraft = (state) => {
     .delete('currentTeamIndex')
 };
 
-
 //combine these two into one
 export const teamLogOn = (state, id) => {
   return state
     .updateIn(
       ['teams'],
       (teams) => teams.map((team) => {
-        return team.get('id').toString() === id ? team.set('loggedOn',true) : team;
+        return team.get('id').toString() === id ? team.set('loggedOn', true) : team;
       })
     );
 };
@@ -90,7 +92,7 @@ export const draftCharacter = (state, pick) => {
 
 export const initTimer = (state, payload) => {
   return state
-    .updateIn(['timer','seconds'], () => payload ? payload.initSeconds : 120)
+    .updateIn(['timer','seconds'], () => payload ? payload.initSeconds : 5)
 };
 
 export const startTimer = (state, payload) => {
