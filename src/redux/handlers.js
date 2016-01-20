@@ -1,26 +1,32 @@
 
 import {io} from './../services/socket.js';
-import {List, fromJS} from 'immutable';
+import {List, fromJS, toJS} from 'immutable';
 
 export const receiveInitialData = (state, payload) => {
   return payload;
 };
 
-export const nextTeam = (state) => {
+export const nextTeam = (s) => {
+  let state = fromJS(s);
   let index = state.get('currentTeamIndex');
 
   if(index === state.get('order').size - 1) {
-    return endDraft(state);
+    return endDraft(state.toJS())
+      /***/
+      // .toJS();
   } else {
     index = index + 1;
 
     return state
       .set('currentTeamIndex', index)
-      .set('currentTeamId', state.getIn(['order', index]));
+      .set('currentTeamId', state.getIn(['order', index]))
+      /***/
+      .toJS();
   }
 };
 
-export const startDraft = (state) => {
+export const startDraft = (s) => {
+  let state = fromJS(s);
   let order = state.get('teams')
     .filter((team,key) => team.get('loggedOn'))
     .map((team,key) => team.get('id'))
@@ -33,39 +39,51 @@ export const startDraft = (state) => {
       draftStatus: 'MID_DRAFT',
       currentTeamIndex: 0,
       currentTeamId: order3.get(0)
-    }));
+    }))
+    /***/
+    .toJS();
 };
 
-
-export const endDraft = (state) => {
+export const endDraft = (s) => {
+  let state = fromJS(s);
   return state
     .set('draftStatus', 'POST_DRAFT')
     .delete('currentTeamId')
     .delete('currentTeamIndex')
+    /***/
+    .toJS();
 };
 
 //combine these two into one
-export const teamLogOn = (state, id) => {
+export const teamLogOn = (s, id) => {
+  let state = fromJS(s);
   return state
     .updateIn(
       ['teams'],
       (teams) => teams.map((team) => {
         return team.get('id').toString() === id ? team.set('loggedOn', true) : team;
       })
-    );
+    )
+    /***/
+    .toJS();
 };
 
-export const teamLogOff = (state, id) => {
+
+export const teamLogOff = (s, id) => {
+  let state = fromJS(s);
   return state
     .updateIn(
       ['teams'],
       (teams) => teams.map((team) => {
         return team.get('id').toString() === id ? team.set('loggedOn', false) : team;
       })
-    );
+    )
+    /***/
+    .toJS();
 };
 
-export const draftCharacter = (state, pick) => {
+export const draftCharacter = (s, pick) => {
+  let state = fromJS(s);
   
   if(state.get('draftStatus') === 'MID_DRAFT') {
 
@@ -84,23 +102,35 @@ export const draftCharacter = (state, pick) => {
       .updateIn (
         ['characterIds'],
         (ids) => ids.splice(char_index, 1)
-      );
+      )
+      /***/
+      .toJS();
+    
     } else {
-      return state;
+      return state
+        /***/
+      .toJS();
     }
 };
 
-export const initTimer = (state, payload) => {
+export const initTimer = (s, payload) => {
+  let state = fromJS(s);
   return state
     .updateIn(['timer','seconds'], () => payload ? payload.initSeconds : 5)
+    /***/
+    .toJS();
 };
 
-export const startTimer = (state, payload) => {
+export const startTimer = (s, payload) => {
+  let state = fromJS(s);
   return state
     .updateIn(['timer','timerIsRunning'], () => true )
+    /***/
+    .toJS();
 };
 
-export const decrementTimer = (state, payload)=>{
+export const decrementTimer = (s, payload)=>{
+  let state = fromJS(s);
   let autoDraft = false;
   let newState = state
     .updateIn(['timer','seconds'],
@@ -112,17 +142,27 @@ export const decrementTimer = (state, payload)=>{
         return seconds;
       });
   if(autoDraft) {
-    return newState.set('autoDraft', true);
+    return newState.set('autoDraft', true)
+      /***/
+    .toJS();
   }
-  return newState;
+  return newState
+    /***/
+    .toJS();
 };
 
-export const resetAutoDraft = (state) => {
-  return state.set('autoDraft', false);
+export const resetAutoDraft = (s) => {
+  let state = fromJS(s);
+  return state.set('autoDraft', false)
+    /***/
+    .toJS();
 };
 
-export const stopTimer = (state) => {
+export const stopTimer = (s) => {
+  let state = fromJS(s);
   return state
     .updateIn(['timer','timerIsRunning'], () => false)
     .updateIn(['timer','seconds'], () => null)
+    /***/
+    .toJS();
 };

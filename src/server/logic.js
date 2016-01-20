@@ -12,7 +12,8 @@ io.on('connection', (socket) => {
   socket.emit('sendLeagueId');
 
   socket.on('returnLeagueId', (data) => {
-    if(!store.getState().get('draftStatus')) {
+
+    if(!store.getState().draftStatus) {
       store.dispatch(actions.getInitialData(data.league_id));
     }
   });
@@ -22,7 +23,7 @@ io.on('connection', (socket) => {
   };
 
   const draftCharacter = (pick) => { 
-    if(pick.team_id === store.getState().get('currentTeamId').toString()) {
+    if(pick.team_id === store.getState().currentTeamId.toString()) {
       stopTimer();
       actions.draftCharacter(pick);
       actions.nextTeam();
@@ -36,25 +37,25 @@ io.on('connection', (socket) => {
 
     socket.emit('updateStore', state);
 
-    if(state.get('autoDraft')) {
+    if(state.autoDraft) {
       actions.resetAutoDraft();
       
-      let char_index = Math.random() * state.get('characterIds').size | 0;
+      let char_index = Math.random() * state.characterIds.length | 0;
       
       let pick = {
-        team_id: state.get('currentTeamId').toString(),
-        char_id: state.getIn(['characterIds', char_index])
+        team_id: state.currentTeamId.toString(),
+        char_id: state.characterIds[char_index]
       };
 
       draftCharacter(pick);
     }
 
-    if(state.get('draftStatus') === 'POST_DRAFT' && state.getIn(['timer','timerIsRunning'])) {
+    if(state.draftStatus === 'POST_DRAFT' && state.timer.timerIsRunning) {
       stopTimer();
       let options = {
-        host: `${process.env.db_url}/api/draft/:draftId`,
+        host: `${db_url}/api/draft/:draftId`,
         method: 'POST',
-        data: {league_id:state.getIn(['league','league_id']),teams: state.get('teams')}
+        data: {league_id:state.league.league_id,teams: state.teams}
       };
       console.log('DATA TO SEND', options);
     }
