@@ -5,8 +5,9 @@
   "main": "build/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node -- src/index.js",
-    "json": "json-server db.json"
+    "start": "nodemon --exec babel-node -- ./src/index.js",
+    "json": "json-server db.json",
+    "db": "nodemon --exec babel-node -- ./db/server.js"
   },
   "babel": {
     "presets": [

@@ -1,6 +1,8 @@
-import {io} from './../server/server.js';
+import {io} from './../server/server';
+import store from './../redux/store';
+import actions from './../redux/actions';
 
-io.on('connection', () => {
+io.on('connection', (socket) => {
   console.log('new client joined');
 });
 

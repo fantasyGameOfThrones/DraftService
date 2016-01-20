@@ -3,7 +3,7 @@ import * as handlers from './handlers';
 import fetch from 'isomorphic-fetch'
 
 
-let DEFAULT_STATE = null;
+let DEFAULT_STATE = new Map();
 
 // todo: pull out timer into own reducer
 export default (state = DEFAULT_STATE, action) => {

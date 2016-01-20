@@ -1,39 +1,40 @@
 import store from './store.js';
 import fetch from 'isomorphic-fetch';
 import {fromJS, List} from 'immutable';
+import {db_url} from './../../env';
 
-export const getInitialData = () => {
+export const getInitialData = (id) => {
+  console.log('actions passed form logic leagueid: ',id);
   return (dispatch) => {
-    return fetch('http://localhost:3000/draft')
+    return fetch(`${db_url}/api/draft/${id}`)
       .then((response)=>response.json())
       .then((data) => {
-        return fromJS(data)
-          .updateIn(
-            ['characters'],
-            (characters) => characters.map((char)=>char.get('char_id'))
-          )
-          .updateIn(
-            ['order'],
-            () => new List()
-          )
-          .updateIn(
-            ['draftStatus'],
-            () => 'PRE_DRAFT'
-          )
-          .updateIn(
-            ['league','teams'],
-            (teams) => teams.map((team) => {
-              return team
-                .set('loggedOn',false)
-                .set('characters', new List())
-            })
-          )
+
+        data.characterIds = data.characters.map((char) => char.char_id)
+
+        data.order = [];
+
+        data.draftStatus = 'PRE_DRAFT';
+
+        data.teams = data.league.teams.map((team) => {
+          team.loggedOn = false;
+          team.characters = [];
+          return team;
+        });
+
+        data.teamsById = {};
+
+        data.teams.forEach((team) => {
+          data.teamsById[team.id]=team;
+        });
+
+        return data;
+        
       })
       .then((data) => {
+        data = fromJS(data);
         return data
-          .set('teams', data.getIn(['league','teams']))
           .deleteIn(['league','teams'])
-          .set('characterIds', data.get('characters'))
           .delete('characters')
       })
       .then((data) => {

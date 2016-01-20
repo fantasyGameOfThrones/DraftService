@@ -1,20 +1,25 @@
 import * as actions from './../redux/actions';
 import {io} from './../services/socket';
 import store from './../redux/store';
-import http from 'http';
-
-store.dispatch(actions.getInitialData());
+import {db_url, league_id} from './../../env';
 
 let timerInterval = null;
 
+
+
 io.on('connection', (socket) => {
+
+  socket.emit('sendLeagueId');
+
+  socket.on('returnLeagueId', (data) => {
+    if(!store.getState().get('draftStatus')) {
+      store.dispatch(actions.getInitialData(data.league_id));
+    }
+  });
 
   const updateView = (timeObj) => {
     io.emit('timeUpdate', timeObj);
   };
-
-  // refactor draftCharacter function, pull out socket listeners
-  // perhaps put store.subscribe elsewhere too. 
 
   const draftCharacter = (pick) => { 
     if(pick.team_id === store.getState().get('currentTeamId').toString()) {
@@ -28,9 +33,10 @@ io.on('connection', (socket) => {
 
   store.subscribe(() => {
     let state = store.getState()
-    socket.emit('updateStore', state);
-    if(state.get('autoDraft')) {
 
+    socket.emit('updateStore', state);
+
+    if(state.get('autoDraft')) {
       actions.resetAutoDraft();
       
       let char_index = Math.random() * state.get('characterIds').size | 0;
@@ -42,12 +48,13 @@ io.on('connection', (socket) => {
 
       draftCharacter(pick);
     }
+
     if(state.get('draftStatus') === 'POST_DRAFT' && state.getIn(['timer','timerIsRunning'])) {
       stopTimer();
       let options = {
-        host: 'http://localhost:3000/results',
+        host: `${process.env.db_url}/api/draft/:draftId`,
         method: 'POST',
-        data: {league_id:state.get('league_id'),teams: state.get('teams')}
+        data: {league_id:state.getIn(['league','league_id']),teams: state.get('teams')}
       };
       console.log('DATA TO SEND', options);
     }
@@ -87,7 +94,7 @@ io.on('connection', (socket) => {
     draftCharacter(pick);
   });
 
-  socket.on('moose', ()=>{
+  socket.on('moose', () => {
     console.log('moose');
     socket.emit('lemur');
   });

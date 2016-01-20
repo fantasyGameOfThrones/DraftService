@@ -13,17 +13,17 @@ export const nextTeam = (state) => {
     return endDraft(state);
   } else {
     index = index + 1;
+
     return state
       .set('currentTeamIndex', index)
       .set('currentTeamId', state.getIn(['order', index]));
   }
 };
 
-
 export const startDraft = (state) => {
   let order = state.get('teams')
-    .filter((team) => team.get('loggedOn'))
-    .map((team) => team.get('id'))
+    .filter((team,key) => team.get('loggedOn'))
+    .map((team,key) => team.get('id'))
     .sort((a,b) => Math.random() > .5);
   let order2 = order.concat(order.reverse());
   let order3 = order2.concat(order2.concat(order2));
