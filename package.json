@@ -8,7 +8,9 @@
     "start": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./src/index.js",
     "json": "json-server db.json",
     "db": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./db/server.js",
-    "mocha": "./node_modules/.bin/mocha --compilers js:babel-register"
+    "mocha": "./node_modules/.bin/mocha --compilers js:babel-register",
+    "testdb": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./db/server.js",
+    "testserver": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./src/index.js"
   },
   "babel": {
     "presets": [
@@ -25,6 +27,7 @@
     "body-parser": "^1.14.2",
     "chai": "^3.4.1",
     "express": "^4.13.3",
+    "forever": "^0.15.1",
     "immutable": "^3.7.6",
     "isomorphic-fetch": "^2.2.0",
     "mocha": "^2.3.4",
