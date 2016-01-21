@@ -1,4 +1,3 @@
-
 import {io} from './../services/socket.js';
 import {List, fromJS, toJS} from 'immutable';
 

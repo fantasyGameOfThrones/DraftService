@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyparser from 'body-parser';
-import {db_host,db_port} from './../env';
+import {db_host,db_port} from './../config';
 const app = express();
 
 app.use(bodyparser.json());

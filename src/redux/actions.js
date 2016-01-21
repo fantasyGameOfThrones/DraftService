@@ -1,7 +1,7 @@
 import store from './store.js';
 import fetch from 'isomorphic-fetch';
 import {fromJS, toJS, List} from 'immutable';
-import {db_url} from './../../env';
+import {db_url} from './../../config';
 
 export const getInitialData = (id) => {
   return (dispatch) => {

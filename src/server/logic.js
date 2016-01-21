@@ -1,7 +1,7 @@
 import * as actions from './../redux/actions';
 import {io} from './../services/socket';
 import store from './../redux/store';
-import {db_url} from './../../env';
+import {db_url} from './../../config';
 import request from 'request';
 
 let timerInterval = null;

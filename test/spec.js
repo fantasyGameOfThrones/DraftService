@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {db_url, socket_url} from './../env';
+import {db_url, socket_url} from './../config';
 import request from 'request';
 
 import io from'socket.io/node_modules/socket.io-client';
