@@ -1,9 +1,30 @@
 import {expect} from 'chai';
-
+import {db_url, socket_url} from './../env';
+import request from 'request';
 
 import io from'socket.io/node_modules/socket.io-client';
-
 let socket, state;
+
+describe ('servers', () => {
+
+  it('should have a database server', (done)=>{
+    request.get(`${db_url}/api/draft/1`, (err, res, body) => {
+      expect(err).to.equal(null);
+      done();
+    });
+  });
+
+  it('should have a socket server', (done) => {
+    socket = io.connect(socket_url);
+    setTimeout(()=>{
+      expect(socket.connected).to.equal(true);
+      done();
+    },100)
+  })
+
+});
+
+
 describe ('draft test', () => {
 
   beforeEach((done) => {
@@ -38,7 +59,7 @@ describe ('draft test', () => {
     setTimeout(() => {
       expect(ping).to.equal('lemur');
       done();
-    }, 50);
+    }, 100);
   });
 
   it('should initialize user', (done) => {
@@ -49,7 +70,7 @@ describe ('draft test', () => {
       expect(state.teams.filter((team) => team.id === 1534)[0].loggedOn).to.equal(true);
       expect(state.teams.filter((team) => team.id === 3047)[0].loggedOn).to.equal(true);
       done();
-    }, 50);
+    }, 100);
 
   });
 
@@ -60,7 +81,7 @@ describe ('draft test', () => {
     setTimeout(() => {
       expect(state.draftStatus).to.equal('MID_DRAFT');
       done();
-    }, 50);
+    }, 100);
   });
 
   it('should put a character on a team', (done) => {
@@ -101,7 +122,7 @@ describe ('draft test', () => {
       expect(state.teams.filter((team) => team.id === 1534)[0].characters.length).to.equal(6);
       expect(state.draftStatus).to.equal('POST_DRAFT');
       done();
-    },(30*state.order.length));
+    },(40*state.order.length));
   })
 
 })

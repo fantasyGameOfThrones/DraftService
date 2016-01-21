@@ -5,6 +5,7 @@
   "main": "build/bundle.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers js:babel-register --reporter spec",
+    "testns": "npm run testdb && npm run testserver && npm run test && killall node",
     "start": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./src/index.js",
     "json": "json-server db.json",
     "db": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./db/server.js",

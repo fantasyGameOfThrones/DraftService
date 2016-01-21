@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyparser from 'body-parser';
+import {db_host,db_port} from './../env';
 const app = express();
 
 app.use(bodyparser.json());
@@ -129,9 +130,9 @@ app.get('/api/draft/:draftId', (req, res) => {
   );
 });
 
-app.listen(2389);
+app.listen(db_port);
 console.log(`
-  DB serving on localhost:2389
+  DB serving on ${db_host}:${db_port}
   ( GET, api/draft/:draftId ) => {
 
     {
