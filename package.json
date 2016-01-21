@@ -5,9 +5,9 @@
   "main": "build/bundle.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers js:babel-register --reporter spec",
-    "start": "nodemon --exec babel-node -- ./src/index.js",
+    "start": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./src/index.js",
     "json": "json-server db.json",
-    "db": "nodemon --exec babel-node -- ./db/server.js",
+    "db": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./db/server.js",
     "mocha": "./node_modules/.bin/mocha --compilers js:babel-register"
   },
   "babel": {
@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-cli": "^6.4.5",
     "babel-register": "^6.4.3",
     "body-parser": "^1.14.2",
     "chai": "^3.4.1",

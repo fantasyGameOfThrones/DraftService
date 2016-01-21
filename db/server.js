@@ -3,12 +3,16 @@ import bodyparser from 'body-parser';
 const app = express();
 
 app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({   
+  extended: true
+})); 
 
-app.post('/api/draft/:draftId', (req, res) => {
-  console.log('draft_id: ', res.params);
-  console.log('results: \n', res.body);
+app.post('/api/draft/:league_id', (req, res) => {
+  console.log('league_id: ', req.params.league_id);
+  console.log('results: \n', req.body);
   res.send('got it!');
 });
+
 
 app.get('/api/draft/:draftId', (req, res) => {
   console.log(req.params);
@@ -125,9 +129,9 @@ app.get('/api/draft/:draftId', (req, res) => {
   );
 });
 
-app.listen(2390);
+app.listen(2389);
 console.log(`
-  DB serving on localhost:2390
+  DB serving on localhost:2389
   ( GET, api/draft/:draftId ) => {
 
     {

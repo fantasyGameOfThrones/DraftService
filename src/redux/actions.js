@@ -11,6 +11,7 @@ export const getInitialData = (id) => {
         data.characterIds = data.characters.map((char) => char.char_id)
         data.order = [];
         data.draftStatus = 'PRE_DRAFT';
+        data.timer = {};
         data.teams = data.league.teams.map((team) => {
           team.loggedOn = false;
           team.characters = [];

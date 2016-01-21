@@ -108,20 +108,14 @@ export const draftCharacter = (s, pick) => {
     }
 };
 
-export const initTimer = (s, payload) => {
-  let state = fromJS(s);
-  return state
-    .updateIn(['timer','seconds'], () => payload ? payload.initSeconds : 5)
-    /***/
-    .toJS();
+export const initTimer = (state, payload) => {
+  state.timer.seconds = 5;
+  return state;
 };
 
-export const startTimer = (s, payload) => {
-  let state = fromJS(s);
-  return state
-    .updateIn(['timer','timerIsRunning'], () => true )
-    /***/
-    .toJS();
+export const startTimer = (state, payload) => {
+  state.timer.timerIsRunning = true;
+  return state;
 };
 
 export const decrementTimer = (s, payload)=>{
@@ -146,19 +140,14 @@ export const decrementTimer = (s, payload)=>{
     .toJS();
 };
 
-export const resetAutoDraft = (s) => {
-  let state = fromJS(s);
-  return state.set('autoDraft', false)
-    /***/
-    .toJS();
+export const resetAutoDraft = (state) => {
+  state.autoDraft = false;
+  return state;
 };
 
-export const stopTimer = (s) => {
-  let state = fromJS(s);
-  return state
-    .updateIn(['timer','timerIsRunning'], () => false)
-    .updateIn(['timer','seconds'], () => null)
-    /***/
-    .toJS();
+export const stopTimer = (state) => {
+  state.timer.timerIsRunning = false;
+  state.timer.seconds = null;
+  return state;
 };
 

@@ -1,7 +1,8 @@
 import * as actions from './../redux/actions';
 import {io} from './../services/socket';
 import store from './../redux/store';
-import {db_url, league_id} from './../../env';
+import {db_url} from './../../env';
+import request from 'request';
 
 let timerInterval = null;
 
@@ -50,12 +51,14 @@ io.on('connection', (socket) => {
 
     if(state.draftStatus === 'POST_DRAFT' && state.timer.timerIsRunning) {
       stopTimer();
-      let options = {
-        host: `${db_url}/api/draft/:draftId`,
-        method: 'POST',
-        data: {league_id:state.league.league_id,teams: state.teams}
-      };
-      console.log('DATA TO SEND', options);
+      var url = `${db_url}/api/draft/${state.league.league_id}`;
+      console.log(url);
+      request.post(url,{league_id:state.league.league_id,teams: state.teams});
+      // let options = {
+      //   host: `${db_url}/api/draft/:draftId`,
+      //   method: 'POST',
+      //   data: {league_id:state.league.league_id,teams: state.teams}
+      // };
     }
   });
 

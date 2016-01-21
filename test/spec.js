@@ -97,12 +97,8 @@ describe ('draft test', () => {
       }
     }(0));
 
-    // setTimeout(()=>{
-      // caller(0);
-    // },50)
-
-    setTimeout(()=> {
-      expect(state.teams.filter((team)=> team.id === 1534)[0].characters.length).to.equal(6);
+    setTimeout(() => {
+      expect(state.teams.filter((team) => team.id === 1534)[0].characters.length).to.equal(6);
       expect(state.draftStatus).to.equal('POST_DRAFT');
       done();
     },(30*state.order.length));
