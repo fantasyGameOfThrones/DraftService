@@ -38,14 +38,11 @@ export const startDraft = (s) => {
     .toJS();
 };
 
-export const endDraft = (s) => {
-  let state = fromJS(s);
-  return state
-    .set('draftStatus', 'POST_DRAFT')
-    .delete('currentTeamId')
-    .delete('currentTeamIndex')
-    /***/
-    .toJS();
+export const endDraft = (state) => {
+  state.draftStatus = 'POST_DRAFT';
+  delete state.currentTeamId;
+  delete state.currentTeamIndex;
+  return state;
 };
 
 //combine these two into one

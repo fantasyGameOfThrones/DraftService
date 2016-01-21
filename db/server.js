@@ -14,7 +14,6 @@ app.post('/api/draft/:league_id', (req, res) => {
   res.send('got it!');
 });
 
-
 app.get('/api/draft/:draftId', (req, res) => {
   console.log(req.params);
   res.send(
