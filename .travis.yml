@@ -3,11 +3,10 @@ node_js:
   - "0.12.7" 
 install: 
   - npm install
-script:
   - npm run testdb
   - npm run testserver
+script:
+  - sleep 15
   - npm test
 after_script:
-  - killall -9 node
   - ./node_modules/.bin/forever stop 0
-  - ./node_modules/.bin/forever stop 1
