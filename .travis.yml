@@ -3,8 +3,6 @@ node_js:
   - "0.12.7" 
 install: 
   - npm install
-before_script:
-  - killall -9 node
 script:
   - npm run testdb
   - npm run testserver
