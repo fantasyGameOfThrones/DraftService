@@ -6,9 +6,7 @@ import {db_url, league_id} from './../../env';
 let timerInterval = null;
 
 
-
 io.on('connection', (socket) => {
-
   socket.emit('sendLeagueId');
 
   socket.on('returnLeagueId', (data) => {
@@ -94,6 +92,11 @@ io.on('connection', (socket) => {
   socket.on('draftCharacter', (pick) => {
     draftCharacter(pick);
   });
+
+  socket.on('reset', (id=1)=> {
+    store.dispatch(actions.getInitialData(id));
+    stopTimer();
+  })
 
   socket.on('moose', () => {
     console.log('moose');

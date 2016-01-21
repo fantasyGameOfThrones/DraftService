@@ -6,22 +6,17 @@ export const receiveInitialData = (state, payload) => {
   return payload;
 };
 
-export const nextTeam = (s) => {
-  let state = fromJS(s);
-  let index = state.get('currentTeamIndex');
+export const nextTeam = (state) => {
 
-  if(index === state.get('order').size - 1) {
-    return endDraft(state.toJS())
-      /***/
-      // .toJS();
+  let index = state.currentTeamIndex;
+
+  if(index === state.order.length - 1) {
+    return endDraft(state);
   } else {
     index = index + 1;
-
-    return state
-      .set('currentTeamIndex', index)
-      .set('currentTeamId', state.getIn(['order', index]))
-      /***/
-      .toJS();
+    state.currentTeamIndex = index;
+    state.currentTeamId = state.order[index];
+    return state;
   }
 };
 
@@ -166,3 +161,4 @@ export const stopTimer = (s) => {
     /***/
     .toJS();
 };
+

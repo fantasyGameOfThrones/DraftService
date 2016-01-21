@@ -28,6 +28,7 @@ export default (state = DEFAULT_STATE, action) => {
     case "STOP_TIMER":
       return handlers.stopTimer(state);
     case "DRAFT_CHARACTER":
+      console.log('draft');
       return handlers.draftCharacter(state, action.payload);
     case "DRAFT_RANDOM":
       return handlers.draftRandom(state);

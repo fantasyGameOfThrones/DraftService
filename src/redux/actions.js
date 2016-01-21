@@ -4,7 +4,6 @@ import {fromJS, toJS, List} from 'immutable';
 import {db_url} from './../../env';
 
 export const getInitialData = (id) => {
-  console.log('actions passed form logic leagueid: ',id);
   return (dispatch) => {
     return fetch(`${db_url}/api/draft/${id}`)
       .then((response)=>response.json())
@@ -17,20 +16,12 @@ export const getInitialData = (id) => {
           team.characters = [];
           return team;
         });
-        // data.teamsById = {};
-        // data.teams.forEach((team) => {
-        //   data.teamsById[team.id]=team;
-        // });
         return data;
       })
       .then((data) => {
         delete data.league.teams;
         delete data.characters;
         return data;
-        // data = fromJS(data);
-        // return data
-        //   .deleteIn(['league','teams'])
-        //   .delete('characters')
       })
       .then((data) => {
         dispatch({
@@ -89,9 +80,10 @@ export const teamLogOff = (id) => {
   });
 };
 
-export const initTimer = () => {
+export const initTimer = (secs) => {
   store.dispatch({
-    type: 'INIT_TIMER'
+    type: 'INIT_TIMER',
+    payload: {initSeconds:secs}
   });
 };
 
@@ -118,3 +110,4 @@ export const stopTimer = () => {
     type: 'STOP_TIMER'
   });
 };
+
