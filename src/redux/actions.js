@@ -1,41 +1,28 @@
 import store from './store.js';
 import fetch from 'isomorphic-fetch';
-import {fromJS, List} from 'immutable';
+import {fromJS, toJS, List} from 'immutable';
 import {db_url} from './../../env';
 
 export const getInitialData = (id) => {
-  console.log('actions passed form logic leagueid: ',id);
   return (dispatch) => {
     return fetch(`${db_url}/api/draft/${id}`)
       .then((response)=>response.json())
       .then((data) => {
-
         data.characterIds = data.characters.map((char) => char.char_id)
-
         data.order = [];
-
         data.draftStatus = 'PRE_DRAFT';
-
+        data.timer = {};
         data.teams = data.league.teams.map((team) => {
           team.loggedOn = false;
           team.characters = [];
           return team;
         });
-
-        data.teamsById = {};
-
-        data.teams.forEach((team) => {
-          data.teamsById[team.id]=team;
-        });
-
         return data;
-        
       })
       .then((data) => {
-        data = fromJS(data);
-        return data
-          .deleteIn(['league','teams'])
-          .delete('characters')
+        delete data.league.teams;
+        delete data.characters;
+        return data;
       })
       .then((data) => {
         dispatch({
@@ -94,9 +81,10 @@ export const teamLogOff = (id) => {
   });
 };
 
-export const initTimer = () => {
+export const initTimer = (secs) => {
   store.dispatch({
-    type: 'INIT_TIMER'
+    type: 'INIT_TIMER',
+    payload: {initSeconds:secs}
   });
 };
 
@@ -123,3 +111,4 @@ export const stopTimer = () => {
     type: 'STOP_TIMER'
   });
 };
+

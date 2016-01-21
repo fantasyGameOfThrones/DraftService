@@ -1,18 +1,18 @@
 import * as actions from './../redux/actions';
 import {io} from './../services/socket';
 import store from './../redux/store';
-import {db_url, league_id} from './../../env';
+import {db_url} from './../../env';
+import request from 'request';
 
 let timerInterval = null;
 
 
-
 io.on('connection', (socket) => {
-
   socket.emit('sendLeagueId');
 
   socket.on('returnLeagueId', (data) => {
-    if(!store.getState().get('draftStatus')) {
+
+    if(!store.getState().draftStatus) {
       store.dispatch(actions.getInitialData(data.league_id));
     }
   });
@@ -22,7 +22,7 @@ io.on('connection', (socket) => {
   };
 
   const draftCharacter = (pick) => { 
-    if(pick.team_id === store.getState().get('currentTeamId').toString()) {
+    if(pick.team_id === store.getState().currentTeamId.toString()) {
       stopTimer();
       actions.draftCharacter(pick);
       actions.nextTeam();
@@ -36,27 +36,29 @@ io.on('connection', (socket) => {
 
     socket.emit('updateStore', state);
 
-    if(state.get('autoDraft')) {
+    if(state.autoDraft) {
       actions.resetAutoDraft();
       
-      let char_index = Math.random() * state.get('characterIds').size | 0;
+      let char_index = Math.random() * state.characterIds.length | 0;
       
       let pick = {
-        team_id: state.get('currentTeamId').toString(),
-        char_id: state.getIn(['characterIds', char_index])
+        team_id: state.currentTeamId.toString(),
+        char_id: state.characterIds[char_index]
       };
 
       draftCharacter(pick);
     }
 
-    if(state.get('draftStatus') === 'POST_DRAFT' && state.getIn(['timer','timerIsRunning'])) {
+    if(state.draftStatus === 'POST_DRAFT' && state.timer.timerIsRunning) {
       stopTimer();
-      let options = {
-        host: `${process.env.db_url}/api/draft/:draftId`,
-        method: 'POST',
-        data: {league_id:state.getIn(['league','league_id']),teams: state.get('teams')}
-      };
-      console.log('DATA TO SEND', options);
+      var url = `${db_url}/api/draft/${state.league.league_id}`;
+      console.log(url);
+      request.post(url,{league_id:state.league.league_id,teams: state.teams});
+      // let options = {
+      //   host: `${db_url}/api/draft/:draftId`,
+      //   method: 'POST',
+      //   data: {league_id:state.league.league_id,teams: state.teams}
+      // };
     }
   });
 
@@ -93,6 +95,11 @@ io.on('connection', (socket) => {
   socket.on('draftCharacter', (pick) => {
     draftCharacter(pick);
   });
+
+  socket.on('reset', (id=1)=> {
+    store.dispatch(actions.getInitialData(id));
+    stopTimer();
+  })
 
   socket.on('moose', () => {
     console.log('moose');

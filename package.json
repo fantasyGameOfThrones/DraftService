@@ -4,10 +4,13 @@
   "description": "",
   "main": "build/bundle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node -- ./src/index.js",
+    "test": "./node_modules/.bin/mocha --compilers js:babel-register --reporter spec",
+    "start": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./src/index.js",
     "json": "json-server db.json",
-    "db": "nodemon --exec babel-node -- ./db/server.js"
+    "db": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./db/server.js",
+    "mocha": "./node_modules/.bin/mocha --compilers js:babel-register",
+    "testdb": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./db/server.js",
+    "testserver": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./src/index.js"
   },
   "babel": {
     "presets": [
@@ -19,10 +22,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-register": "^6.4.3",
     "body-parser": "^1.14.2",
+    "chai": "^3.4.1",
     "express": "^4.13.3",
+    "forever": "^0.15.1",
     "immutable": "^3.7.6",
     "isomorphic-fetch": "^2.2.0",
+    "mocha": "^2.3.4",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "react-redux": "^4.0.6",
