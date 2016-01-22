@@ -46,17 +46,14 @@ export const endDraft = (state) => {
 };
 
 //combine these two into one
-export const teamLogOn = (s, id) => {
-  let state = fromJS(s);
+export const teamLogOn = (state, id) => {
+  state.teams = state.teams.map((team)=>{
+    if(team.id.toString() === id){
+      team.loggedOn = true;
+    }
+    return team;
+  })
   return state
-    .updateIn(
-      ['teams'],
-      (teams) => teams.map((team) => {
-        return team.get('id').toString() === id ? team.set('loggedOn', true) : team;
-      })
-    )
-    /***/
-    .toJS();
 };
 
 
