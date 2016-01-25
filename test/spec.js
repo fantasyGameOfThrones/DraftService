@@ -1,8 +1,6 @@
 import {expect} from 'chai';
 import request from 'request';
 import io from'socket.io/node_modules/socket.io-client';
-//let socket_url='http://localhost:8080'
-//let db_url='http://localhost:2389'
 let db_url=process.env.DB_URL||"http://localhost:2389";
 let socket_url=process.env.SOCKET_URL||"http://localhost:8080";
 let socket, state;
@@ -83,7 +81,7 @@ describe ('draft test', () => {
     setTimeout(() => {
       expect(state.draftStatus).to.equal('MID_DRAFT');
       done();
-    }, 100);
+    }, 500);
   });
 
   it('should put a character on a team', (done) => {
@@ -93,15 +91,15 @@ describe ('draft test', () => {
     socket.emit('startDraft');
     setTimeout(() => {
       socket.emit('draftCharacter', {team_id: state.order[count].toString(), char_id: ++count})
-    },50)
+    },200)
     setTimeout(() => {
       socket.emit('draftCharacter', {team_id: state.order[count].toString(), char_id: ++count})
-    },100);
+    },300);
     setTimeout(() => {
       expect(state.teams.filter((team)=> team.id === 1534)[0].characters.length).to.equal(1);
       expect(state.teams.filter((team)=> team.id === 3047)[0].characters.length).to.equal(1);
       done();
-    },200);
+    },400);
   });
 
   
