@@ -2,4 +2,7 @@
 - hosts: do
   tasks:
   - name: "update git"
-    git: repo="https://github.com/fantasyGameOfThrones/DraftService.git" dest=/var/lib/docker/volumes/draftvol/_data/draft clone=no update=yes
+    git: repo="https://github.com/fantasyGameOfThrones/DraftService.git" dest=/var/lib/docker/volumes/draftvol/_data/DraftService clone=no update=yes
+  - name: "rebuild"
+    shell: cd /var/lib/docker/voluems/draftvol/_data/DraftService/ && npm run build
+    
