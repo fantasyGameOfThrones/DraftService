@@ -1,0 +1,5 @@
+--- 
+- hosts: do
+  tasks:
+  - name: "update git"
+    git: repo="https://github.com/fantasyGameOfThrones/DraftService.git" dest=/var/lib/docker/volumes/draftvol/_data/draft clone=no update=yes

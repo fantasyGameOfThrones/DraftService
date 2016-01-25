@@ -10,8 +10,9 @@
     "json": "./node_modules/.bin/json-server db.json",
     "db": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./db/server.js",
     "mocha": "./node_modules/.bin/mocha --compilers js:babel-register",
-    "testdb": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./db/server.js",
-    "testserver": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./src/index.js"
+    "testdb": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./db/src/server.js",
+    "testserver": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./src/index.js",
+    "build":"babel src -d build"
   },
   "babel": {
     "presets": [

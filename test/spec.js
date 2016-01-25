@@ -1,8 +1,10 @@
 import {expect} from 'chai';
-import {db_url, socket_url} from './../config';
 import request from 'request';
 import io from'socket.io/node_modules/socket.io-client';
-
+//let socket_url='http://localhost:8080'
+//let db_url='http://localhost:2389'
+let db_url=process.env.DB_URL||"http://localhost:2389";
+let socket_url=process.env.SOCKET_URL||"http://localhost:8080";
 let socket, state;
 
 describe ('servers', () => {
@@ -19,7 +21,7 @@ describe ('servers', () => {
     setTimeout(()=>{
       expect(socket.connected).to.equal(true);
       done();
-    },100)
+    },1500)
   })
 
 });
@@ -28,7 +30,7 @@ describe ('servers', () => {
 describe ('draft test', () => {
 
   beforeEach((done) => {
-    socket = io.connect('http://localhost:8080');
+    socket = io.connect(socket_url);
 
     socket.on('sendLeagueId', () => {
       socket.emit('returnLeagueId', {league_id: 1})
@@ -40,7 +42,7 @@ describe ('draft test', () => {
 
     setTimeout(() => {
       done();
-    },100);
+    },500);
 
   });
 
@@ -49,7 +51,7 @@ describe ('draft test', () => {
     socket.disconnect();
     setTimeout(()=>{
       done();
-    },50);
+    },500);
   });
 
   it('should ping moose and receive lemur', (done) => {
@@ -59,7 +61,7 @@ describe ('draft test', () => {
     setTimeout(() => {
       expect(ping).to.equal('lemur');
       done();
-    }, 100);
+    }, 500);
   });
 
   it('should initialize user', (done) => {
@@ -70,7 +72,7 @@ describe ('draft test', () => {
       expect(state.teams.filter((team) => team.id === 1534)[0].loggedOn).to.equal(true);
       expect(state.teams.filter((team) => team.id === 3047)[0].loggedOn).to.equal(true);
       done();
-    }, 100);
+    }, 500);
 
   });
 
@@ -114,7 +116,7 @@ describe ('draft test', () => {
           if(i < state.order.length){
             drafter(i + 1);
           }
-        },30);
+        },50);
       }
     }(0));
 
@@ -122,7 +124,7 @@ describe ('draft test', () => {
       expect(state.teams.filter((team) => team.id === 1534)[0].characters.length).to.equal(6);
       expect(state.draftStatus).to.equal('POST_DRAFT');
       done();
-    },(40*state.order.length));
+    },(130*state.order.length));
   })
 
 })

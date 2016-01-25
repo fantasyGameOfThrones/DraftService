@@ -47,12 +47,12 @@ export const endDraft = (state) => {
 
 //combine these two into one
 export const teamLogOn = (state, id) => {
-  state.teams = state.teams.map((team)=>{
+  state.teams = state.teams.map((team) => {
     if(team.id.toString() === id){
       team.loggedOn = true;
     }
     return team;
-  })
+  });
   return state
 };
 

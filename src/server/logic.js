@@ -1,9 +1,8 @@
 import * as actions from './../redux/actions';
 import {io} from './../services/socket';
 import store from './../redux/store';
-import {db_url} from './../../config';
 import request from 'request';
-
+let db_url = process.env.DB_URL || 'http://localhost:2389';
 let timerInterval = null;
 
 

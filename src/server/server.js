@@ -1,14 +1,13 @@
 import express from 'express';
 import IO from 'socket.io';
-import {socket_url, socket_port} from './../../config';
 
 const app = express();
-export const io = IO.listen(app.listen(socket_port));
+export const io = IO.listen(app.listen(8080));
 
 console.log(`
   ##############################################################
   ###                 GREETINGS HUMAN                        ###
-                i can socket @ ${socket_url}                 
+                i can socket @ ${process.env.SOCKET_URL}                 
   ###                       ^_^                              ###
   ##############################################################
 `);

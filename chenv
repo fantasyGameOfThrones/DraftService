@@ -1,0 +1,11 @@
+#!/bin/bash
+if [ $1 == 'dev' ]; then
+  export ENV='dev'
+  export DB_URL='http://localhost:2389'
+  export SOCKET_URL='http://localhost:8080'
+else
+  export ENV='prod'
+  export DB_URL="http://$1:2389"
+  export SOCKET_URL="http://$1:8080"
+fi
+

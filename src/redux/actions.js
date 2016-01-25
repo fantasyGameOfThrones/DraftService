@@ -1,13 +1,13 @@
 import store from './store.js';
 import fetch from 'isomorphic-fetch';
-import {fromJS, toJS, List} from 'immutable';
-import {db_url} from './../../config';
+let db_url = process.env.DB_URL;
 
 export const getInitialData = (id) => {
   return (dispatch) => {
     return fetch(`${db_url}/api/draft/${id}`)
       .then((response)=>response.json())
       .then((data) => {
+        console.log("data: ",data)
         data.characterIds = data.characters.map((char) => char.char_id)
         data.order = [];
         data.draftStatus = 'PRE_DRAFT';
