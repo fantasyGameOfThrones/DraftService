@@ -12,7 +12,7 @@
     "mocha": "./node_modules/.bin/mocha --compilers js:babel-register",
     "testdb": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./db/src/server.js",
     "testserver": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./src/index.js",
-    "build":"node_modules/.bin/babel src -d build"
+    "build": "node_modules/.bin/babel src -d build"
   },
   "babel": {
     "presets": [
@@ -24,6 +24,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel": "^6.3.26",
     "babel-cli": "^6.4.5",
     "babel-register": "^6.4.3",
     "body-parser": "^1.14.2",
