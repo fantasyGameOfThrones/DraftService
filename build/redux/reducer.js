@@ -1,14 +1,32 @@
-import {List, Map, fromJS} from 'immutable';
-import * as handlers from './handlers';
-import fetch from 'isomorphic-fetch'
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-let DEFAULT_STATE = {};
+var _immutable = require('immutable');
+
+var _handlers = require('./handlers');
+
+var handlers = _interopRequireWildcard(_handlers);
+
+var _isomorphicFetch = require('isomorphic-fetch');
+
+var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var DEFAULT_STATE = {};
 
 // todo: pull out timer into own reducer
-export default (state = DEFAULT_STATE, action) => {
 
-  switch(action.type) {
+exports.default = function () {
+  var state = arguments.length <= 0 || arguments[0] === undefined ? DEFAULT_STATE : arguments[0];
+  var action = arguments[1];
+
+  switch (action.type) {
     case "RECEIVE_INITAL_DATA":
       return handlers.receiveInitialData(state, action.payload);
     case "TEAM_LOG_ON":
@@ -39,4 +57,3 @@ export default (state = DEFAULT_STATE, action) => {
       return state;
   }
 };
-

@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "0.12.7" 
+install: 
+  - npm install
+  - npm run testdb
+  - npm run testserver
+script:
+  - sleep 15
+  - npm test
+after_script:
+  - ./node_modules/.bin/forever stop 0

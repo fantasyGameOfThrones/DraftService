@@ -1,26 +1,26 @@
-
 import {io} from './../services/socket.js';
-import {List, fromJS} from 'immutable';
+import {List, fromJS, toJS} from 'immutable';
 
 export const receiveInitialData = (state, payload) => {
   return payload;
 };
 
 export const nextTeam = (state) => {
-  let index = state.get('currentTeamIndex');
 
-  if(index === state.get('order').size - 1) {
+  let index = state.currentTeamIndex;
+
+  if(index === state.order.length - 1) {
     return endDraft(state);
   } else {
     index = index + 1;
-
-    return state
-      .set('currentTeamIndex', index)
-      .set('currentTeamId', state.getIn(['order', index]));
+    state.currentTeamIndex = index;
+    state.currentTeamId = state.order[index];
+    return state;
   }
 };
 
-export const startDraft = (state) => {
+export const startDraft = (s) => {
+  let state = fromJS(s);
   let order = state.get('teams')
     .filter((team,key) => team.get('loggedOn'))
     .map((team,key) => team.get('id'))
@@ -33,39 +33,45 @@ export const startDraft = (state) => {
       draftStatus: 'MID_DRAFT',
       currentTeamIndex: 0,
       currentTeamId: order3.get(0)
-    }));
+    }))
+    /***/
+    .toJS();
 };
 
-
 export const endDraft = (state) => {
-  return state
-    .set('draftStatus', 'POST_DRAFT')
-    .delete('currentTeamId')
-    .delete('currentTeamIndex')
+  state.draftStatus = 'POST_DRAFT';
+  delete state.currentTeamId;
+  delete state.currentTeamIndex;
+  return state;
 };
 
 //combine these two into one
 export const teamLogOn = (state, id) => {
+  state.teams = state.teams.map((team) => {
+    if(team.id.toString() === id){
+      team.loggedOn = true;
+    }
+    return team;
+  });
   return state
-    .updateIn(
-      ['teams'],
-      (teams) => teams.map((team) => {
-        return team.get('id').toString() === id ? team.set('loggedOn', true) : team;
-      })
-    );
 };
 
-export const teamLogOff = (state, id) => {
+
+export const teamLogOff = (s, id) => {
+  let state = fromJS(s);
   return state
     .updateIn(
       ['teams'],
       (teams) => teams.map((team) => {
         return team.get('id').toString() === id ? team.set('loggedOn', false) : team;
       })
-    );
+    )
+    /***/
+    .toJS();
 };
 
-export const draftCharacter = (state, pick) => {
+export const draftCharacter = (s, pick) => {
+  let state = fromJS(s);
   
   if(state.get('draftStatus') === 'MID_DRAFT') {
 
@@ -84,23 +90,29 @@ export const draftCharacter = (state, pick) => {
       .updateIn (
         ['characterIds'],
         (ids) => ids.splice(char_index, 1)
-      );
+      )
+      /***/
+      .toJS();
+    
     } else {
-      return state;
+      return state
+        /***/
+      .toJS();
     }
 };
 
 export const initTimer = (state, payload) => {
-  return state
-    .updateIn(['timer','seconds'], () => payload ? payload.initSeconds : 5)
+  state.timer.seconds = 5;
+  return state;
 };
 
 export const startTimer = (state, payload) => {
-  return state
-    .updateIn(['timer','timerIsRunning'], () => true )
+  state.timer.timerIsRunning = true;
+  return state;
 };
 
-export const decrementTimer = (state, payload)=>{
+export const decrementTimer = (s, payload)=>{
+  let state = fromJS(s);
   let autoDraft = false;
   let newState = state
     .updateIn(['timer','seconds'],
@@ -112,17 +124,23 @@ export const decrementTimer = (state, payload)=>{
         return seconds;
       });
   if(autoDraft) {
-    return newState.set('autoDraft', true);
+    return newState.set('autoDraft', true)
+      /***/
+    .toJS();
   }
-  return newState;
+  return newState
+    /***/
+    .toJS();
 };
 
 export const resetAutoDraft = (state) => {
-  return state.set('autoDraft', false);
+  state.autoDraft = false;
+  return state;
 };
 
 export const stopTimer = (state) => {
-  return state
-    .updateIn(['timer','timerIsRunning'], () => false)
-    .updateIn(['timer','seconds'], () => null)
+  state.timer.timerIsRunning = false;
+  state.timer.seconds = null;
+  return state;
 };
+
