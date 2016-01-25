@@ -22,6 +22,7 @@ var getInitialData = exports.getInitialData = function getInitialData(id) {
     return (0, _isomorphicFetch2.default)(db_url + '/api/draft/' + id).then(function (response) {
       return response.json();
     }).then(function (data) {
+      console.log("data: ", data);
       data.characterIds = data.characters.map(function (char) {
         return char.char_id;
       });
