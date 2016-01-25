@@ -1,3 +1,2 @@
-docker run -d -p 8080:8080 ryanwholey/socketserver:latest
-docker run -d -p 2389:2389 ryanwholey/drafttestdbserver:latest
-npm test
+docker run -d -p 2389:2389 -v draftvol:/code rw/testdb
+docker run -it -p 8080:8080 -v draftvol:/code rw/draft 
