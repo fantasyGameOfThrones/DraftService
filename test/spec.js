@@ -26,7 +26,6 @@ describe ('servers', () => {
 
 
 describe ('draft test', () => {
-
   beforeEach((done) => {
     socket = io.connect(socket_url);
 
@@ -91,22 +90,21 @@ describe ('draft test', () => {
     socket.emit('startDraft');
     setTimeout(() => {
       socket.emit('draftCharacter', {team_id: state.order[count].toString(), char_id: ++count})
-    },200)
+    },500)
     setTimeout(() => {
       socket.emit('draftCharacter', {team_id: state.order[count].toString(), char_id: ++count})
-    },300);
+    },1000);
     setTimeout(() => {
       expect(state.teams.filter((team)=> team.id === 1534)[0].characters.length).to.equal(1);
       expect(state.teams.filter((team)=> team.id === 3047)[0].characters.length).to.equal(1);
       done();
-    },400);
+    },1500);
   });
 
   
   it('should complete a draft', (done) => {
     socket.emit('init','1534');
     socket.emit('startDraft');
-
     (function drafter(i){
       if(i < state.order.length){
         setTimeout(() => {
@@ -114,7 +112,7 @@ describe ('draft test', () => {
           if(i < state.order.length){
             drafter(i + 1);
           }
-        },50);
+        },200);
       }
     }(0));
 
@@ -122,7 +120,7 @@ describe ('draft test', () => {
       expect(state.teams.filter((team) => team.id === 1534)[0].characters.length).to.equal(6);
       expect(state.draftStatus).to.equal('POST_DRAFT');
       done();
-    },(130*state.order.length));
+    },(200*state.order.length));
   })
 
 })
