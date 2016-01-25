@@ -20,8 +20,7 @@ var store = (0, _redux.applyMiddleware)(_reduxThunk2.default)(_redux.createStore
 
 store.subscribe(function () {
   var state = store.getState();
-  console.log('store says: ', state.teams);
-  console.log('store says: ', state.order);
+  console.log(state);
 });
 
 exports.default = store;
