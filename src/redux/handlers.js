@@ -45,10 +45,10 @@ export const endDraft = (state) => {
   return state;
 };
 
-//combine these two into one
+
 export const teamLogOn = (state, id) => {
   state.teams = state.teams.map((team) => {
-    if(team.id.toString() === id){
+    if(team.id === id){
       team.loggedOn = true;
     }
     return team;

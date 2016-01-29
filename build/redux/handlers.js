@@ -59,8 +59,10 @@ var endDraft = exports.endDraft = function endDraft(state) {
 
 //combine these two into one
 var teamLogOn = exports.teamLogOn = function teamLogOn(state, id) {
+
   state.teams = state.teams.map(function (team) {
-    if (team.id.toString() === id) {
+    console.log(team.id === id, team.id, id);
+    if (team.id === id) {
       team.loggedOn = true;
     }
     return team;

@@ -2,6 +2,7 @@ import * as actions from './../redux/actions';
 import {io} from './../services/socket';
 import store from './../redux/store';
 import request from 'request';
+
 let db_url = process.env.DB_URL || 'http://localhost:2389';
 let timerInterval = null;
 
@@ -51,7 +52,7 @@ io.on('connection', (socket) => {
     if(state.draftStatus === 'POST_DRAFT' && state.timer.timerIsRunning) {
       stopTimer();
       var url = `${db_url}/api/draft/${state.league.league_id}`;
-      console.log(url);
+      console.log('TODO: change team to users && post to ===>>',url);
       request.post(url,{league_id:state.league.league_id,teams: state.teams});
       // let options = {
       //   host: `${db_url}/api/draft/:draftId`,
