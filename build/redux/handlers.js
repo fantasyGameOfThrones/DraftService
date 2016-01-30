@@ -57,10 +57,9 @@ var endDraft = exports.endDraft = function endDraft(state) {
   return state;
 };
 
-//combine these two into one
 var teamLogOn = exports.teamLogOn = function teamLogOn(state, id) {
   state.teams = state.teams.map(function (team) {
-    if (team.id.toString() === id) {
+    if (team.id === id) {
       team.loggedOn = true;
     }
     return team;
@@ -111,7 +110,7 @@ var draftCharacter = exports.draftCharacter = function draftCharacter(s, pick) {
 };
 
 var initTimer = exports.initTimer = function initTimer(state, payload) {
-  state.timer.seconds = 5;
+  state.timer.seconds = 500;
   return state;
 };
 

@@ -18,6 +18,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var app = (0, _express2.default)();
 var io = exports.io = _socket2.default.listen(app.listen(8080));
 
-console.log('\n  ##############################################################\n  ###                 GREETINGS HUMAN                        ###\n                i can socket @ ' + process.env.SOCKET_URL + '                 \n  ###                       ^_^                              ###\n  ##############################################################\n');
+console.log('\n  ##############################################################\n  ###                 GREETINGS HUMAN                        ###\n                i can socket @ ' + process.env.SOCKET_URL + ' \n                also, db_urL: ' + process.env.DB_URL + '                \n  ###                       ^_^                              ###\n  ##############################################################\n');
 
 app.use('/', _express2.default.static(__dirname + '/../../client'));

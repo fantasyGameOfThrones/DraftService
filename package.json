@@ -8,11 +8,12 @@
     "testns": "npm run testdb && npm run testserver && npm run test && killall node",
     "start": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./src/index.js",
     "json": "./node_modules/.bin/json-server db.json",
-    "db": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./db/server.js",
+    "db": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./db/src/server.js",
     "mocha": "./node_modules/.bin/mocha --compilers js:babel-register",
     "testdb": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./db/src/server.js",
     "testserver": "./node_modules/.bin/forever start -c ./node_modules/.bin/babel-node -- ./src/index.js",
-    "build": "babel src -d build"
+    "build": "babel src -d build",
+    "runbuild": "./node_modules/.bin/nodemon ./build/index.js"
   },
   "babel": {
     "presets": [

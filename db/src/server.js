@@ -1,6 +1,5 @@
 import express from 'express';
 import bodyparser from 'body-parser';
-//import {db_host,db_port} from './../config';
 const app = express();
 
 app.use(bodyparser.json());
@@ -20,7 +19,7 @@ app.get('/api/draft/:draftId', (req, res) => {
     {
       "league": {
         "league_id": 1,
-        "teams": [
+        "users": [
           {
             "id": 1534
           },
@@ -36,93 +35,93 @@ app.get('/api/draft/:draftId', (req, res) => {
         ]
       },
       "characters": [
-        {"char_id": 0},
-        {"char_id": 1},
-        {"char_id": 2},
-        {"char_id": 3},
-        {"char_id": 4},
-        {"char_id": 5},
-        {"char_id": 6},
-        {"char_id": 7},
-        {"char_id": 8},
-        {"char_id": 9},
-        {"char_id": 10},
-        {"char_id": 11},
-        {"char_id": 12},
-        {"char_id": 13},
-        {"char_id": 14},
-        {"char_id": 15},
-        {"char_id": 16},
-        {"char_id": 17},
-        {"char_id": 18},
-        {"char_id": 19},
-        {"char_id": 20},
-        {"char_id": 21},
-        {"char_id": 22},
-        {"char_id": 23},
-        {"char_id": 24},
-        {"char_id": 25},
-        {"char_id": 26},
-        {"char_id": 27},
-        {"char_id": 28},
-        {"char_id": 29},
-        {"char_id": 30},
-        {"char_id": 31},
-        {"char_id": 32},
-        {"char_id": 33},
-        {"char_id": 34},
-        {"char_id": 35},
-        {"char_id": 36},
-        {"char_id": 37},
-        {"char_id": 38},
-        {"char_id": 39},
-        {"char_id": 40},
-        {"char_id": 41},
-        {"char_id": 42},
-        {"char_id": 43},
-        {"char_id": 44},
-        {"char_id": 45},
-        {"char_id": 46},
-        {"char_id": 47},
-        {"char_id": 48},
-        {"char_id": 49},
-        {"char_id": 50},
-        {"char_id": 51},
-        {"char_id": 52},
-        {"char_id": 53},
-        {"char_id": 54},
-        {"char_id": 55},
-        {"char_id": 56},
-        {"char_id": 57},
-        {"char_id": 58},
-        {"char_id": 59},
-        {"char_id": 60},
-        {"char_id": 61},
-        {"char_id": 62},
-        {"char_id": 63},
-        {"char_id": 64},
-        {"char_id": 65},
-        {"char_id": 66},
-        {"char_id": 67},
-        {"char_id": 68},
-        {"char_id": 69},
-        {"char_id": 70},
-        {"char_id": 71},
-        {"char_id": 72},
-        {"char_id": 73},
-        {"char_id": 74},
-        {"char_id": 75},
-        {"char_id": 76},
-        {"char_id": 77},
-        {"char_id": 78},
-        {"char_id": 79},
-        {"char_id": 80},
-        {"char_id": 81},
-        {"char_id": 82},
-        {"char_id": 83},
-        {"char_id": 84},
-        {"char_id": 85},
-        {"char_id": 86}
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86
       ]   
     }
 
@@ -130,28 +129,29 @@ app.get('/api/draft/:draftId', (req, res) => {
 });
 
 app.listen(2389);
-console.log(`
-  ( GET, api/draft/:draftId ) => {
 
-    {
-      league:{
-        id: NUMBER (corresponding to draftId),
-        users: [
-          {id: NUMBER},
-          .
-          .
-          .
-          {id: NUMBER}
-        ]
-      },
-      characters: [
-        {id: NUMBER},
-        .
-        .
-        .
-        {id: NUMBER}
-      ]
-    }
+// console.log(`
+//   ( GET, api/draft/:draftId ) => {
 
-  }
-`);
+//     {
+//       league:{
+//         id: NUMBER (corresponding to draftId),
+//         users: [
+//           {id: NUMBER},
+//           .
+//           .
+//           .
+//           {id: NUMBER}
+//         ]
+//       },
+//       characters: [
+//         {id: NUMBER},
+//         .
+//         .
+//         .
+//         {id: NUMBER}
+//       ]
+//     }
+
+//   }
+// `);

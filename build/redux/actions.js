@@ -22,21 +22,18 @@ var getInitialData = exports.getInitialData = function getInitialData(id) {
     return (0, _isomorphicFetch2.default)(db_url + '/api/draft/' + id).then(function (response) {
       return response.json();
     }).then(function (data) {
-      console.log("data: ", data);
-      data.characterIds = data.characters.map(function (char) {
-        return char.char_id;
-      });
+      data.league_id = data.league.leagueId;
+      data.characterIds = data.characters;
       data.order = [];
       data.draftStatus = 'PRE_DRAFT';
       data.timer = {};
-      data.teams = data.league.teams.map(function (team) {
+      data.teams = data.league.users.map(function (team) {
         team.loggedOn = false;
-        team.characters = [];
         return team;
       });
       return data;
     }).then(function (data) {
-      delete data.league.teams;
+      delete data.league.users;
       delete data.characters;
       return data;
     }).then(function (data) {
@@ -45,6 +42,7 @@ var getInitialData = exports.getInitialData = function getInitialData(id) {
         payload: data
       });
     }).catch(function (err) {
+      console.log('error is in here');
       console.log(err);
     });
   };

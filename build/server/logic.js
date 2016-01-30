@@ -36,7 +36,8 @@ _socket.io.on('connection', function (socket) {
   };
 
   var draftCharacter = function draftCharacter(pick) {
-    if (pick.team_id === _store2.default.getState().currentTeamId.toString()) {
+    socket.broadcast.emit('charDrafted', pick);
+    if (pick.team_id === _store2.default.getState().currentTeamId) {
       stopTimer();
       actions.draftCharacter(pick);
       actions.nextTeam();
@@ -65,14 +66,21 @@ _socket.io.on('connection', function (socket) {
 
     if (state.draftStatus === 'POST_DRAFT' && state.timer.timerIsRunning) {
       stopTimer();
-      var url = db_url + '/api/draft/' + state.league.league_id;
-      console.log(url);
-      _request2.default.post(url, { league_id: state.league.league_id, teams: state.teams });
-      // let options = {
-      //   host: `${db_url}/api/draft/:draftId`,
-      //   method: 'POST',
-      //   data: {league_id:state.league.league_id,teams: state.teams}
-      // };
+      console.log('leagueID', state.league_id);
+      var url = db_url + '/api/draft/' + state.league_id;
+
+      console.log('TODO: change team to users && post to ===>>', url);
+      state.teams.forEach(function (team) {
+        if (!team.loggedOn) {
+          for (var i = 0; i < 6; i++) {
+            var char_index = Math.random() * state.characterIds.length | 0;
+            team.characters.push(state.characterIds.splice(char_index, 1)[0]);
+          }
+        }
+      });
+      socket.emit('updateStore', state);
+
+      _request2.default.post(url).form({ league_id: state.league.league_id, users: state.teams });
     }
   });
 

@@ -45,10 +45,10 @@ export const endDraft = (state) => {
   return state;
 };
 
-//combine these two into one
+
 export const teamLogOn = (state, id) => {
   state.teams = state.teams.map((team) => {
-    if(team.id.toString() === id){
+    if(team.id === id){
       team.loggedOn = true;
     }
     return team;
@@ -102,7 +102,7 @@ export const draftCharacter = (s, pick) => {
 };
 
 export const initTimer = (state, payload) => {
-  state.timer.seconds = 5;
+  state.timer.seconds = 500;
   return state;
 };
 

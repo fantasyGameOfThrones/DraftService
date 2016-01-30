@@ -2,6 +2,7 @@ import * as actions from './../redux/actions';
 import {io} from './../services/socket';
 import store from './../redux/store';
 import request from 'request';
+
 let db_url = process.env.DB_URL || 'http://localhost:2389';
 let timerInterval = null;
 
@@ -21,7 +22,8 @@ io.on('connection', (socket) => {
   };
 
   const draftCharacter = (pick) => { 
-    if(pick.team_id === store.getState().currentTeamId.toString()) {
+    socket.broadcast.emit('charDrafted', pick);
+    if(pick.team_id === store.getState().currentTeamId) {
       stopTimer();
       actions.draftCharacter(pick);
       actions.nextTeam();
@@ -50,14 +52,21 @@ io.on('connection', (socket) => {
 
     if(state.draftStatus === 'POST_DRAFT' && state.timer.timerIsRunning) {
       stopTimer();
-      var url = `${db_url}/api/draft/${state.league.league_id}`;
-      console.log(url);
-      request.post(url,{league_id:state.league.league_id,teams: state.teams});
-      // let options = {
-      //   host: `${db_url}/api/draft/:draftId`,
-      //   method: 'POST',
-      //   data: {league_id:state.league.league_id,teams: state.teams}
-      // };
+      console.log('leagueID',state.league_id);
+      var url = `${db_url}/api/draft/${state.league_id}`;
+
+      console.log('TODO: change team to users && post to ===>>',url);
+      state.teams.forEach((team)=>{
+        if(!team.loggedOn){
+          for(var i = 0; i < 6; i++){
+            let char_index = Math.random() * state.characterIds.length | 0;
+            team.characters.push(state.characterIds.splice(char_index,1)[0]);
+          }
+        }
+      })
+      socket.emit('updateStore', state);
+      
+      request.post(url).form({league_id:state.league.league_id, users: state.teams});
     }
   });
 

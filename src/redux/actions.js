@@ -7,20 +7,19 @@ export const getInitialData = (id) => {
     return fetch(`${db_url}/api/draft/${id}`)
       .then((response)=>response.json())
       .then((data) => {
-        console.log("data: ",data)
-        data.characterIds = data.characters.map((char) => char.char_id)
+        data.league_id = data.league.leagueId;
+        data.characterIds = data.characters;
         data.order = [];
         data.draftStatus = 'PRE_DRAFT';
         data.timer = {};
-        data.teams = data.league.teams.map((team) => {
+        data.teams = data.league.users.map((team) => {
           team.loggedOn = false;
-          team.characters = [];
           return team;
         });
         return data;
       })
       .then((data) => {
-        delete data.league.teams;
+        delete data.league.users;
         delete data.characters;
         return data;
       })
@@ -31,6 +30,7 @@ export const getInitialData = (id) => {
         });
       })
       .catch((err)=>{
+        console.log('error is in here');
         console.log(err);
       })
   }

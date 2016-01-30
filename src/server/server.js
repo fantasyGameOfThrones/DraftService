@@ -7,7 +7,8 @@ export const io = IO.listen(app.listen(8080));
 console.log(`
   ##############################################################
   ###                 GREETINGS HUMAN                        ###
-                i can socket @ ${process.env.SOCKET_URL}                 
+                i can socket @ ${process.env.SOCKET_URL} 
+                also, db_urL: ${process.env.DB_URL}                
   ###                       ^_^                              ###
   ##############################################################
 `);
