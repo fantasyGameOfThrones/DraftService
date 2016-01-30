@@ -7,6 +7,7 @@ const store = applyMiddleware(thunk)(createStore)(reducer);
 store.subscribe(() => {
   let state = store.getState();
   console.log(state.teams);
+  console.log(state.league);
 });
 
 export default store;

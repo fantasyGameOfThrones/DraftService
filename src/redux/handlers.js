@@ -102,7 +102,7 @@ export const draftCharacter = (s, pick) => {
 };
 
 export const initTimer = (state, payload) => {
-  state.timer.seconds = 5;
+  state.timer.seconds = 500;
   return state;
 };
 
