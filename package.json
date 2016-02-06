@@ -6,7 +6,7 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers js:babel-register --reporter nyan",
     "testns": "npm run testdb && npm run testserver && npm run test && killall node",
-    "start": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./src/index.js",
+    "start": ". ./chenv dev && ./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./src/index.js",
     "json": "./node_modules/.bin/json-server db.json",
     "db": "./node_modules/.bin/nodemon --exec ./node_modules/.bin/babel-node -- ./db/src/server.js",
     "mocha": "./node_modules/.bin/mocha --compilers js:babel-register",
